@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPC Builder - Dungeon Brew</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Dungeonbrew Theme Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1e1e1e;
+            color: #f5f5f5;
+        }
+
+        /* Main page container - adapted from NPC builder's Tailwind container */
+        .db-container { /* Renamed to avoid conflict if Tailwind's 'container' is used elsewhere */
+            background: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 900px; /* Increased slightly for NPC builder layout */
+            padding: 20px;
+            margin: 20px auto;
+        }
+
+        .branding {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .branding-logo {
+            max-width: 200px; /* Adjusted for NPC builder title */
+            height: auto;
+            display: block; /* Changed to block for easier centering */
+            margin: 0 auto 10px auto; /* Added bottom margin */
+        }
+
+        /* Main page title - H1 */
+        .db-main-title {
+            font-size: 28px; /* Was 2.25rem (36px) via text-4xl */
+            margin-bottom: 20px; /* Was mb-8 (32px) */
+            color: #ffdd57;
+            text-align: center;
+            font-weight: bold; /* Tailwind's font-bold */
+        }
+        
+        /* Section cards */
+        .db-section-card {
+            background: #444;
+            border: 1px solid #555;
+            border-radius: 8px; /* Was rounded-xl */
+            padding: 1.5rem; /* Was p-6 */
+            margin-bottom: 1.5rem; /* Was mb-8 */
+        }
+
+        .db-section-card h2,
+        .db-section-card h3#motivationFormTitle { /* Target specific h3 */
+            font-size: 1.75rem; /* Was text-2xl (1.5rem) */
+            font-weight: 600; /* Tailwind's font-semibold */
+            color: #ffdd57;
+            margin-top: 0;
+            margin-bottom: 1rem; /* Was mb-5 */
+            border-bottom: 2px solid #555;
+            padding-bottom: 0.5rem; /* Was pb-3 */
+        }
+         .db-section-card h3 { /* General h3 within cards, e.g., for output sections */
+            font-size: 1.25rem; /* Tailwind text-xl */
+            font-weight: 600;
+            color: #ffdd57; /* Adjusted for better visibility */
+            margin-bottom: 0.75rem; /* Tailwind mb-3 */
+        }
+        .db-section-card h4 { /* For motivation list titles */
+            font-size: 1.125rem; /* Tailwind text-lg */
+            font-weight: 500; /* Tailwind font-medium */
+            color: #ffdd57; /* Adjusted */
+        }
+
+
+        /* Form Elements */
+        .db-label {
+            display: block;
+            font-weight: 500; /* Tailwind font-medium */
+            color: #f5f5f5;
+            margin-bottom: 0.25rem; /* Tailwind mb-1 */
+        }
+
+        .db-input, .db-textarea, .db-select {
+            width: 100%;
+            background-color: #2a2a2a;
+            color: #f5f5f5;
+            border: 1px solid #555;
+            border-radius: 5px; /* Was rounded-lg */
+            padding: 10px; /* Was p-3 */
+            margin-bottom: 1rem; 
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .db-input::placeholder, .db-textarea::placeholder {
+            color: #888; /* Placeholder text color */
+        }
+
+        .db-input:focus, .db-textarea:focus, .db-select:focus {
+            outline: none;
+            border-color: #ffdd57;
+            box-shadow: 0 0 0 2px rgba(255, 221, 87, 0.5);
+        }
+        .db-textarea {
+            min-height: 80px; /* Was rows="4" or rows="3" */
+            resize: vertical;
+        }
+
+        /* Hint text below inputs (like motivation level description) */
+        #motivationLevelDescription, .selected-option-description {
+            font-size: 0.875rem;
+            color: #aaa; 
+            margin-top: 0.25rem; /* Adjusted from 0.5rem */
+            font-style: italic;
+            min-height: 1.25rem;
+            line-height: 1.4;
+        }
+        #motivationLevelDescription { cursor: help; } /* Keep cursor for this specific one */
+        .selected-option-description { cursor: default; }
+
+
+        /* Buttons */
+        .db-button {
+            background: #222;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600; /* Tailwind font-semibold */
+            margin: 5px 0; /* Adjusted margin */
+            transition: background-color 0.2s ease-in-out;
+            width: 100%; /* Make buttons full width by default in their column */
+            display: inline-flex; /* For icon alignment */
+            align-items: center;
+            justify-content: center;
+        }
+        .db-button:hover {
+            background: #e65c54; 
+        }
+        .db-button i { /* Icon styling within buttons */
+            margin-right: 0.5rem;
+        }
+        
+        /* Specific button types - can override base .db-button */
+        .db-button-add { /* For Add/Update Motivation */
+            background-color: #38a169; /* Greenish, like download-button */
+        }
+        .db-button-add:hover {
+            background-color: #2f855a;
+        }
+        .db-button-cancel { /* For Cancel Edit */
+            background-color: #666;
+        }
+        .db-button-cancel:hover {
+            background-color: #555;
+        }
+        .db-button-save { /* For Save NPC */
+             background-color: #007bff; /* Blue, like print-button */
+        }
+        .db-button-save:hover {
+            background-color: #0056b3;
+        }
+
+        /* Small action buttons (edit/delete motivation) */
+        .db-action-button {
+            padding: 6px 10px;
+            font-size: 0.9em;
+            margin-left: 8px;
+            color: #fff;
+            border-radius: 4px;
+        }
+        .db-action-button.edit {
+            background-color: #3b82f6; /* Blue */
+        }
+        .db-action-button.edit:hover {
+            background-color: #2563eb;
+        }
+        .db-action-button.delete {
+            background-color: #e65c54; /* Red */
+        }
+        .db-action-button.delete:hover {
+            background-color: #c53030;
+        }
+
+        /* Motivation List Items */
+        .db-list-item { /* Replaces .motivation-item */
+            background-color: #505050; 
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #666;
+            color: #f5f5f5; /* Ensure text inside is light */
+        }
+        .db-list-item .motivation-text { /* Ensure text inside is light */
+             color: #f5f5f5;
+        }
+        .db-list-item .italic { /* For placeholder text */
+            color: #aaa !important;
+        }
+
+
+        /* Custom Tooltip */
+        #customTooltip {
+            position: absolute;
+            display: none;
+            background-color: #222; /* Darker background */
+            color: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            z-index: 1000;
+            max-width: 300px; 
+            word-wrap: break-word;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Slightly stronger shadow */
+            pointer-events: none; 
+            border: 1px solid #555; /* Add border */
+        }
+
+        /* Message Box */
+        #messageBox {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000; 
+            width: 300px;
+        }
+        .app-message { /* Using Dungeonbrew's class name */
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            color: white;
+            text-align: center;
+        }
+        .app-message.type-info { background-color: #007bff; } 
+        .app-message.type-success { background-color: #28a745; } 
+        .app-message.type-error { background-color: #dc3545; } 
+        .app-message.type-warning { background-color: #ffc107; color: #333; } /* Added warning */
+
+
+        /* Speech Profile specific styling */
+        .speech-profile-label, .speech-profile-label-main { cursor: help; }
+        .speech-profile-label { border-bottom: 1px dotted #888; } /* Lighter dotted line */
+        
+        .speech-section-grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr)); 
+            gap: 1.5rem; 
+        }
+        @media (min-width: 768px) { 
+            .speech-section-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        .conditional-dropdown-container { margin-top: 0.5rem; }
+        .radio-group label { margin-right: 0.5rem; color: #f5f5f5; }
+        .radio-group input[type="radio"] { margin-right: 0.25rem; accent-color: #ffdd57; }
+        .checkbox-group label { margin-right: 0.5rem; color: #f5f5f5; }
+        .checkbox-group input[type="checkbox"] { margin-right: 0.25rem; accent-color: #ffdd57; }
+        .speech-column-group > div:not(:last-child) { margin-bottom: 1.5rem; }
+
+        /* Output text colors */
+        #outputNpcName { color: #ffdd57; }
+        #outputNpcDescription { color: #f5f5f5; }
+        #speechProfileDisplayContainer { color: #f5f5f5; }
+        #speechProfileDisplayContainer strong { color: #ffdd57; }
+        #outputMotivations ul { color: #f5f5f5; }
+        #outputMotivations .italic { color: #aaa !important; }
+
+
+        /* Print styles - largely kept from user's example */
+        @media print {
+            body {
+                background-color: #ffffff !important; 
+                color: #000000 !important;
+                font-size: 11pt; 
+            }
+            .db-container {
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background: #fff !important;
+            }
+            .branding, 
+            #messageBox, 
+            .db-button, /* Hide all main buttons */
+            .db-action-button, /* Hide edit/delete motivation buttons */
+            #motivationFormTitle + .grid button /* Hide Add/Cancel for motivation */
+             {
+                display: none !important; 
+            }
+            .db-section-card {
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                page-break-inside: avoid;
+                background: #fff !important;
+            }
+            .db-section-card h2, .db-section-card h3, .db-section-card h4 {
+                color: #000 !important;
+                border-bottom: 1px solid #ccc !important;
+            }
+            .db-label { color: #000 !important; }
+            .db-input, .db-textarea, .db-select {
+                background-color: #fdfdfd !important; 
+                color: #000 !important;
+                border: 1px solid #ddd !important;
+            }
+            .db-list-item {
+                background-color: #f9f9f9 !important;
+                border: 1px solid #eee !important;
+                color: #000 !important;
+            }
+             .db-list-item .motivation-text { color: #000 !important; }
+            .db-main-title { color: #000 !important; font-size: 22pt; }
+            /* Hide input elements in print by default, show only their values if needed (more complex) */
+            .db-input, .db-select, .db-textarea, .radio-group, .checkbox-group,
+            #speedFastTypeContainer, #speedSlowTypeContainer, 
+            #volumeLoudTypeContainer, #volumeSoftTypeContainer,
+            .conditional-dropdown-container p /* Hide selected option descriptions in form */
+             { display: none !important; }
+            
+            /* Show only the output sections clearly */
+            #npcDetailsDisplay, #outputSpeechProfile, #outputMotivations { display: block !important; }
+            #outputNpcDescription, #speechProfileDisplayContainer, #outputMotivations ul { color: #000 !important; }
+            #outputNpcName { color: #000 !important; }
+             #speechProfileDisplayContainer strong { color: #000 !important; }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="customTooltip"></div>
+
+    <div class="db-container">
+        <div class="branding">
+            <a href="https://www.patreon.com/DungeonBrew" target="_blank" rel="noopener noreferrer">
+                <img src="Updated Logo.png" alt="Dungeon Brew Logo" class="branding-logo">
+            </a>
+        </div>
+        <h1 class="db-main-title">NPC Builder</h1>
+
+        <main>
+            <section class="db-section-card">
+                <h2>NPC Details</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="npcName" class="db-label">Name:</label>
+                        <input type="text" id="npcName" placeholder="e.g., Thalgar Ironfist" class="db-input">
+                    </div>
+                    <div>
+                        <label for="npcDescription" class="db-label">Description:</label>
+                        <textarea id="npcDescription" placeholder="e.g., A stern but fair dwarven blacksmith..." class="db-textarea"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section id="speechProfileSection" class="db-section-card">
+                <h2>Speech Profile</h2>
+                <div class="speech-section-grid">
+                    <div class="space-y-2"> 
+                        <label class="db-label speech-profile-label-main" data-tooltip-key="speed._main">Speed:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="speedFast" name="speechSpeed" value="fast">
+                            <label for="speedFast" class="speech-profile-label" data-tooltip-key="speed.fast._main">Fast</label>
+                            <input type="radio" id="speedSlow" name="speechSpeed" value="slow">
+                            <label for="speedSlow" class="speech-profile-label" data-tooltip-key="speed.slow._main">Slow</label>
+                        </div>
+                        <div id="speedFastTypeContainer" class="conditional-dropdown-container hidden">
+                            <select id="speedFastType" class="db-select">
+                                <option value="">Select Fast Type...</option>
+                            </select>
+                            <p id="speedFastTypeDescription" class="selected-option-description"></p>
+                        </div>
+                        <div id="speedSlowTypeContainer" class="conditional-dropdown-container hidden">
+                            <select id="speedSlowType" class="db-select">
+                                <option value="">Select Slow Type...</option>
+                            </select>
+                            <p id="speedSlowTypeDescription" class="selected-option-description"></p>
+                        </div>
+                    </div>
+                    <div class="space-y-2"> 
+                        <label class="db-label speech-profile-label-main" data-tooltip-key="volume._main">Volume:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="volumeLoud" name="speechVolume" value="loud">
+                            <label for="volumeLoud" class="speech-profile-label" data-tooltip-key="volume.loud._main">Loud</label>
+                            <input type="radio" id="volumeSoft" name="speechVolume" value="soft">
+                            <label for="volumeSoft" class="speech-profile-label" data-tooltip-key="volume.soft._main">Soft</label>
+                        </div>
+                        <div id="volumeLoudTypeContainer" class="conditional-dropdown-container hidden">
+                            <select id="volumeLoudType" class="db-select">
+                                <option value="">Select Loud Type...</option>
+                            </select>
+                            <p id="volumeLoudTypeDescription" class="selected-option-description"></p>
+                        </div>
+                        <div id="volumeSoftTypeContainer" class="conditional-dropdown-container hidden">
+                            <select id="volumeSoftType" class="db-select">
+                                <option value="">Select Soft Type...</option>
+                            </select>
+                            <p id="volumeSoftTypeDescription" class="selected-option-description"></p>
+                        </div>
+                    </div>
+
+                    <div class="speech-column-group space-y-6"> 
+                        <div class="space-y-2">
+                            <label for="speechTone" class="db-label speech-profile-label-main" data-tooltip-key="tone._main">Tone:</label>
+                            <select id="speechTone" class="db-select">
+                                <option value="">Select Tone...</option>
+                            </select>
+                            <p id="speechToneDescription" class="selected-option-description"></p>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="speechEmphasis" class="db-label speech-profile-label-main" data-tooltip-key="emphasis._main">Emphasis:</label>
+                            <select id="speechEmphasis" class="db-select">
+                                <option value="">Select Emphasis Type...</option>
+                            </select>
+                            <p id="speechEmphasisDescription" class="selected-option-description"></p>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="speechPauses" class="db-label speech-profile-label-main" data-tooltip-key="pauses._main">Pauses:</label>
+                            <select id="speechPauses" class="db-select">
+                                <option value="">Select Pause Type...</option>
+                            </select>
+                            <p id="speechPausesDescription" class="selected-option-description"></p>
+                        </div>
+                    </div>
+                    <div class="speech-column-group space-y-6"> 
+                        <div class="space-y-2">
+                            <label for="speechVocabularyCategory" class="db-label speech-profile-label-main" data-tooltip-key="vocabulary._main">Vocabulary:</label>
+                            <select id="speechVocabularyCategory" class="db-select mb-2">
+                                <option value="">Select Category...</option>
+                            </select>
+                            <p id="speechVocabularyCategoryDescription" class="selected-option-description"></p>
+                            <textarea id="speechVocabularyExamples" rows="2" placeholder="Enter specific words or examples..." class="db-textarea"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="speechMetaphorsCategory" class="db-label speech-profile-label-main" data-tooltip-key="metaphors._main">Metaphors:</label>
+                            <select id="speechMetaphorsCategory" class="db-select mb-2">
+                                <option value="">Select Category...</option>
+                            </select>
+                            <p id="speechMetaphorsCategoryDescription" class="selected-option-description"></p>
+                            <textarea id="speechMetaphorsExamples" rows="2" placeholder="Enter specific metaphors or examples..." class="db-textarea"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 md:col-span-2"> 
+                        <label class="db-label speech-profile-label-main" data-tooltip-key="speech_patterns._main">Speech Patterns:</label>
+                        <div id="speechPatternsCheckboxes" class="checkbox-group grid grid-cols-2 sm:grid-cols-3 gap-2 mb-2">
+                        </div>
+                        <textarea id="speechPatternsExamples" rows="2" placeholder="Provide examples or further describe patterns..." class="db-textarea"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <section class="db-section-card">
+                <h3 id="motivationFormTitle">Add Motivation</h3>
+                <div class="grid md:grid-cols-12 gap-4 mb-6 items-center"> 
+                    <div class="md:col-span-12">
+                        <label for="motivationText" class="db-label">Motivation Details:</label>
+                        <textarea id="motivationText" placeholder="e.g., Ensure timely iron shipment..." class="db-textarea"></textarea>
+                    </div>
+                    <div class="md:col-span-9">
+                        <label for="motivationLevel" class="db-label">Level:</label>
+                        <select id="motivationLevel" class="db-select">
+                            <option value="minor">Minor</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="major">Major</option>
+                        </select>
+                        <p id="motivationLevelDescription" data-tooltip-definition-concise="" data-tooltip-definition-full=""></p>
+                    </div>
+                    <div class="md:col-span-3"> 
+                         <button id="addOrUpdateMotivationBtn" class="db-button db-button-add">
+                            <i class="fas fa-plus"></i>Add
+                         </button>
+                         <button id="cancelEditBtn" class="db-button db-button-cancel hidden mt-2">
+                            <i class="fas fa-times"></i>Cancel
+                         </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="npcOutput" class="db-section-card">
+                <h2>Generated NPC Profile</h2>
+                <div id="npcDetailsDisplay" class="mb-6">
+                    <h3 id="outputNpcName">NPC Name Will Appear Here</h3>
+                    <p id="outputNpcDescription" class="text-sm">NPC description will appear here.</p>
+                </div>
+                
+                <div id="outputSpeechProfile" class="mb-6">
+                     <h3>Speech Profile:</h3>
+                     <div id="speechProfileDisplayContainer" class="text-sm space-y-1">
+                        <p class="italic">Speech profile details will appear here once selected.</p>
+                     </div>
+                </div>
+
+                <div id="outputMotivations">
+                    <h3>Motivations:</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4>Minor Motivations:</h4>
+                            <ul id="minorMotivationsList" class="list-none pl-0 space-y-2 text-sm">
+                                <li class="italic">No minor motivations added yet.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Moderate Motivations:</h4>
+                            <ul id="moderateMotivationsList" class="list-none pl-0 space-y-2 text-sm">
+                                <li class="italic">No moderate motivations added yet.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Major Motivations:</h4>
+                            <ul id="majorMotivationsList" class="list-none pl-0 space-y-2 text-sm">
+                                 <li class="italic">No major motivations added yet.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button id="saveNpcBtn" class="db-button db-button-save mt-8">
+                    <i class="fas fa-save"></i>Save NPC (Logs to Console)
+                </button>
+            </section>
+        </main>
+
+        <div id="messageBox"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const npcNameInput = document.getElementById('npcName');
+            const npcDescriptionInput = document.getElementById('npcDescription');
+            const motivationTextInput = document.getElementById('motivationText');
+            const motivationLevelSelect = document.getElementById('motivationLevel');
+            const motivationLevelDescription = document.getElementById('motivationLevelDescription'); 
+            const addOrUpdateMotivationBtn = document.getElementById('addOrUpdateMotivationBtn');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const motivationFormTitle = document.getElementById('motivationFormTitle');
+            const speedFastRadio = document.getElementById('speedFast');
+            const speedSlowRadio = document.getElementById('speedSlow');
+            const speedFastTypeContainer = document.getElementById('speedFastTypeContainer');
+            const speedFastTypeSelect = document.getElementById('speedFastType');
+            const speedFastTypeDescription = document.getElementById('speedFastTypeDescription');
+            const speedSlowTypeContainer = document.getElementById('speedSlowTypeContainer');
+            const speedSlowTypeSelect = document.getElementById('speedSlowType');
+            const speedSlowTypeDescription = document.getElementById('speedSlowTypeDescription');
+            const volumeLoudRadio = document.getElementById('volumeLoud');
+            const volumeSoftRadio = document.getElementById('volumeSoft');
+            const volumeLoudTypeContainer = document.getElementById('volumeLoudTypeContainer');
+            const volumeLoudTypeSelect = document.getElementById('volumeLoudType');
+            const volumeLoudTypeDescription = document.getElementById('volumeLoudTypeDescription');
+            const volumeSoftTypeContainer = document.getElementById('volumeSoftTypeContainer');
+            const volumeSoftTypeSelect = document.getElementById('volumeSoftType');
+            const volumeSoftTypeDescription = document.getElementById('volumeSoftTypeDescription');
+            const speechToneSelect = document.getElementById('speechTone');
+            const speechToneDescription = document.getElementById('speechToneDescription');
+            const speechEmphasisSelect = document.getElementById('speechEmphasis');
+            const speechEmphasisDescription = document.getElementById('speechEmphasisDescription');
+            const speechPausesSelect = document.getElementById('speechPauses');
+            const speechPausesDescription = document.getElementById('speechPausesDescription');
+            const speechVocabularyCategorySelect = document.getElementById('speechVocabularyCategory');
+            const speechVocabularyCategoryDescription = document.getElementById('speechVocabularyCategoryDescription');
+            const speechVocabularyExamplesTextarea = document.getElementById('speechVocabularyExamples');
+            const speechMetaphorsCategorySelect = document.getElementById('speechMetaphorsCategory');
+            const speechMetaphorsCategoryDescription = document.getElementById('speechMetaphorsCategoryDescription');
+            const speechMetaphorsExamplesTextarea = document.getElementById('speechMetaphorsExamples');
+            const speechPatternsCheckboxesContainer = document.getElementById('speechPatternsCheckboxes');
+            const speechPatternsExamplesTextarea = document.getElementById('speechPatternsExamples');
+            const saveNpcBtn = document.getElementById('saveNpcBtn');
+            const outputNpcName = document.getElementById('outputNpcName');
+            const outputNpcDescription = document.getElementById('outputNpcDescription');
+            const speechProfileDisplayContainer = document.getElementById('speechProfileDisplayContainer');
+            const minorMotivationsList = document.getElementById('minorMotivationsList');
+            const moderateMotivationsList = document.getElementById('moderateMotivationsList');
+            const majorMotivationsList = document.getElementById('majorMotivationsList');
+            const messageBox = document.getElementById('messageBox');
+            // const messageText = document.getElementById('messageText'); // Not used if messageBox is directly populated
+            const customTooltipElement = document.getElementById('customTooltip');
+
+
+            // --- Definitions ---
+            const motivationDefinitions = {
+                minor: { concise: "Short-term objectives; immediate needs or tasks. Quickly resolved.", full: "These represent short-term objectives for your NPC, such as ensuring a timely delivery of goods or resolving a recent squabble with a neighbor. They are immediate concerns or tasks that demand the NPC's attention. These motivations may be resolved relatively quickly, either through the NPC's own efforts or with the help of the PCs. Once fulfilled, minor motivations give way to new challenges or opportunities, in the same way they do in our own lives. Short term goals often represent the needs of the NPC." },
+                moderate: { concise: "Mid-range goals; require sustained effort and resources. May involve multiple steps or obstacles.", full: "These are mid-range objectives that your NPC aims to achieve, such as establishing a successful trade partnership with a neighboring town or securing a political alliance to bolster their influence. These motivations typically require more sustained effort and resources to accomplish compared to minor motivations. They may involve multiple steps or require the NPC to overcome significant obstacles along the way. As a result, these motivations can allow for PCs to be involved with the NPC for longer periods of time as they work through the various obstacles to help the NPC achieve their goal. Once achieved, moderate motivations can lead to new opportunities or challenges for the NPC to pursue, which may be as simple as moving on to the next trade partnership but could involve dealing with the persistent threat of bandits along their trade routes." },
+                major: { concise: "Long-term aspirations; core driving forces shaping an NPC's life. Profound consequences.", full: "Major Motivations: These are long-term aspirations or core driving forces behind your NPC's actions and decisions. Examples include seeking revenge against a sworn enemy who wronged them in the past or striving to ascend to a position of power and authority within their community or organization. Major motivations often shape the NPC's entire life trajectory and can drive them to undertake bold and ambitious endeavors. Achieving or failing to achieve a major motivation can have profound consequences not only for the NPC but also for the world around them. Major motivations are slow to accomplish and slow to replace but can endear PCs to them for life." }
+            };
+            const speechDefinitions = {
+                speed: { _main: "Overall pace of the NPC's speech.", fast: { _main: "Speaks faster than average.", nervous: "Always anxious or tense, trying to speak as quickly as possible before they are interrupted.", excitement: "Unable to contain their enthusiasm, talking over themselves because they speak faster than they think.", urgent: "Everything is important and must be conveyed before it is too late because everything is always in crisis.", impatient: "Unwilling to take the time to properly engage in conversations because there is something else they would rather be doing.", fast_talker: "Trying to pull one over by confusing their conversation partners because they don’t want anyone else to take the time to hear what they have to say." }, slow: { _main: "Speaks slower than average.", thoughtful: "Deliberate and careful in their speech, taking the time to consider each word because being correct is more important than being quick.", calm: "Tranquil and relaxing in their communications with no urgency for what is coming because taking another moment will change nothing.", authoritative: "Measured and commanding because they know that no one will interrupt them.", weary: "Always tired, slow to communicate because of their perpetual exhaustion.", uncertain: "Vague or unsure of what their own thoughts are because they don’t know what you want to hear or they have never thought about the subject themselves." } },
+                volume: { _main: "Overall loudness of the NPC's speech.", loud: { _main: "Speaks louder than average.", confident: "Project their voice with certainty because they know they are right or that no one will challenge them.", commanding: "Know that the best way to be heard over the rabble is to rise above it. Literally. Because they are loud.", excitable: "Has a difficult time reigning in their volume due to excitability or impulsiveness.", angry: "In a perpetual rage that results in always being loud and acts as a challenge to anyone who might try to interrupt them.", attention_seeker: "Wants to be the center of attention and habitually draws attention to themselves." }, soft: { _main: "Speaks softer than average.", shy: "Uncertain and hesitant in their interactions, seeming to lack conviction and can be bullied into almost anything.", enigmatic: "Prone to secrecy and confidence, habitually avoiding attention because the only people who hear them are those they want to hear them.", serene: "Gentle and soothing tone from someone who does not need to project in order to be heard or be confident.", respectful: "Deferential or polite to show respect to others because their actions reflect their bearing more than their volume.", muttering: "Constantly chattering to themselves, but impossible to hear because their words are usually for themselves." } },
+                tone: { _main: "The emotional quality or character of the NPC's voice.", cheerful: "Always sounds upbeat and positive, even when the situation doesn't warrant it.", sarcastic: "Caustic, biting edge to speech, often with exaggerated intonation to emphasize the insincerity.", monotone: "Speaks in a flat, unvarying pitch, that makes them seem disinterested or robotic, but can also convey a level of unflappable calmness.", sincere: "Speaks with genuine emotion, often heartfelt, that makes them seem honest, trustworthy, and relatable.", hostile: "Aggressive and confrontational, often with a sharp edge that can make even neutral statements sound like threats." },
+                emphasis: { _main: "How the NPC stresses words or phrases.", key_words: "Places stress on important words within a sentence to draw attention to them, which can change the meaning of a statement significantly based on what is emphasized.", repetition: "Repeats key phrases or words to ensure they are noticed and remembered because they think they are clever, are absentminded, or are trying to use doublespeak.", pitch_variation: "Uses changes in pitch to emphasize certain parts of their speech. Rising and falling tones can make their speech more engaging and highlight specific points.", volume_shifts: "Alternates between speaking loudly and softly to maintain interest, underscore certain points, or to confuse the listener.", dramatic_pauses: "Pauses at strategic points to let the significance of their words sink in or to convey authority." },
+                pauses: { _main: "The use of hesitations or breaks in speech.", stumbling: "Pausing because they are tripping over their own words due to talking to fast, forgetting what they are going to say, or just forgetting words.", awkward: "Pauses at odd times, suggesting discomfort, social anxiety or that they are uneasy or unsure of themselves.", calculated: "Pauses deliberately to control the flow of conversation to manipulate the listener's perceptions, sometimes in order to lie.", uncertain: "Often hesitates, using filler words like \"um\" and \"uh.\"", thoughtful: "Hesitates as they carefully consider their words, suggesting a deep thinker who values precision in communication." },
+                vocabulary: { _main: "The type of words the NPC tends to use.", general: "No specific vocabulary type, uses common language or custom entries.", technical_jargon: "Characters can use terms specific to their profession or expertise to set themselves apart.", slang: "Using informal language or slang can indicate a character’s background or social standing.", regional_terms: "Incorporating regional vocabulary can give characters a sense of place within the fantasy world." },
+                metaphors: { _main: "Figurative language the NPC uses.", general: "No specific metaphor type, uses common language or custom entries.", common: "Metaphors, in general, can add personality to a character. Having simple metaphors that a character is fond of are usually easy enough to find and jot down for future use.", cultural: "Metaphors that come from a character’s cultural background.", professional: "Sometimes giving a character their own personal metaphors can help make that character unique as they try to articulate their viewpoint on the world through their experiences." },
+                speech_patterns: { _main: "Characteristic ways the NPC forms sentences or phrases.", repetition: "Repeating words or phrases because the character is obsessive, nervous, or excited. (e.g., Gloating: 'Well, well, well...'; Insecure: 'Sorry, sorry...'; Exasperation: 'It isn’t right! I thought we had this…listen, it isn’t right.')", phrasal_verbs: "Slang verbs (e.g., Noble: 'Proceed' not 'go on'; Rural: 'Looked after' not 'cared for'; Educated: 'Encountered' not 'run into').", varied_sentence_structure: "Length and / or complexity. Short & direct (e.g., 'We work hard. We live simple.') vs. long & elaborate (e.g., 'Our community has always been one of diligence...')." }
+            };
+
+            // --- NPC Data Structure ---
+            let currentNPC = {
+                name: '',
+                description: '',
+                motivations: { 
+                    minor: [],
+                    moderate: [],
+                    major: []
+                },
+                speechProfile: { 
+                    speed: null, 
+                    speedType: null, 
+                    volume: null, 
+                    volumeType: null, 
+                    tone: null,
+                    emphasis: null,
+                    pauses: null,
+                    vocabularyCategory: null,
+                    vocabularyExamples: '',
+                    metaphorsCategory: null,
+                    metaphorsExamples: '',
+                    speechPatterns: [], 
+                    speechPatternsExamples: ''
+                }
+            };
+            let editingMotivationId = null; 
+
+            // --- Custom Tooltip Logic ---
+            function showCustomTooltip(event, text) {
+                if (!text) return;
+                customTooltipElement.innerHTML = text;
+                customTooltipElement.style.display = 'block';
+                let x = event.pageX + 15; // Offset from cursor
+                let y = event.pageY + 15; // Offset from cursor
+
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                const tooltipRect = customTooltipElement.getBoundingClientRect();
+
+                if (x + tooltipRect.width > screenWidth - 10) { // 10px buffer from edge
+                    x = event.pageX - tooltipRect.width - 15; // Place to the left
+                }
+                if (y + tooltipRect.height > screenHeight - 10) {
+                    y = event.pageY - tooltipRect.height - 15; // Place above
+                }
+                if (x < 10) x = 10; // Prevent going off left edge
+                if (y < 10) y = 10; // Prevent going off top edge
+
+                customTooltipElement.style.left = `${x}px`;
+                customTooltipElement.style.top = `${y}px`;
+            }
+
+            function hideCustomTooltip() {
+                customTooltipElement.style.display = 'none';
+            }
+            
+            function getDefinitionFromKey(keyString) {
+                if (!keyString) return null;
+                const keys = keyString.split('.');
+                let current = speechDefinitions; // Assuming speechDefinitions is the primary source for these keys
+                for (const key of keys) {
+                    if (current && typeof current === 'object' && key in current) {
+                        current = current[key];
+                    } else {
+                        return null; 
+                    }
+                }
+                // If the final resolved value is an object with _main, use that, otherwise use the value itself (for direct definitions)
+                return (typeof current === 'object' && current._main) ? current._main : current;
+            }
+
+
+            // --- Utility Functions ---
+            function showMessage(message, type = 'info', duration = 3000) { 
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `app-message type-${type}`;
+                messageDiv.textContent = message;
+                messageBox.appendChild(messageDiv);
+
+                setTimeout(() => {
+                    messageDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        messageDiv.remove();
+                    }, 500); // Remove after fade out
+                }, duration);
+            }
+            function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
+
+            // --- Populate Dropdowns & Checkboxes ---
+            function populateSelectWithOptions(selectElement, optionsObject, definitionBaseKey, mainDefinitionKey = '_main') {
+                Object.keys(optionsObject).forEach(key => {
+                    if (key !== mainDefinitionKey) { 
+                        const option = document.createElement('option');
+                        option.value = key;
+                        option.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        
+                        const definition = (typeof optionsObject[key] === 'object' && optionsObject[key]._main) ? optionsObject[key]._main : optionsObject[key];
+                        option.setAttribute('data-definition', definition || ''); // For custom tooltip on hover over option
+                        
+                        selectElement.appendChild(option);
+                    }
+                });
+            }
+            
+            function populateCheckboxes(containerElement, optionsObject, groupName, definitionBaseKey) {
+                containerElement.innerHTML = ''; 
+                Object.keys(optionsObject).forEach(key => {
+                    if (key === '_main') return; 
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'flex items-center';
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `${groupName}-${key}`;
+                    checkbox.name = groupName;
+                    checkbox.value = key;
+                    checkbox.className = 'mr-2 h-4 w-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500';
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `${groupName}-${key}`;
+                    label.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    label.className = 'text-sm'; // Removed speech-profile-label, tooltip via event delegation
+                    label.setAttribute('data-tooltip-key', `${definitionBaseKey}.${key}`);
+                                        
+                    wrapper.appendChild(checkbox);
+                    wrapper.appendChild(label);
+                    containerElement.appendChild(wrapper);
+                });
+            }
+
+            // --- Update Display Functions ---
+            function updateNpcDetailsDisplay() { 
+                outputNpcName.textContent = currentNPC.name || 'NPC Name Will Appear Here';
+                outputNpcDescription.textContent = currentNPC.description || 'NPC description will appear here.';
+            }
+            function renderMotivations() { 
+                 const lists = { minor: minorMotivationsList, moderate: moderateMotivationsList, major: majorMotivationsList };
+                for (const level in lists) {
+                    const ul = lists[level];
+                    ul.innerHTML = ''; 
+                    if (currentNPC.motivations[level].length === 0) {
+                        ul.innerHTML = `<li class="italic db-list-item">No ${level} motivations added yet.</li>`;
+                    } else {
+                        currentNPC.motivations[level].forEach(mot => {
+                            const li = document.createElement('li');
+                            li.className = 'db-list-item'; 
+                            li.dataset.id = mot.id; li.dataset.level = level; 
+                            const textSpan = document.createElement('span');
+                            textSpan.className = 'motivation-text';
+                            textSpan.textContent = mot.text;
+                            li.appendChild(textSpan);
+                            const buttonsDiv = document.createElement('div');
+                            // buttonsDiv.className = 'action-buttons'; // Not needed if styling buttons directly
+                            const editBtn = document.createElement('button');
+                            editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit'; 
+                            editBtn.className = 'db-action-button edit';
+                            editBtn.onclick = () => startEditMotivation(mot.id, level, mot.text); 
+                            buttonsDiv.appendChild(editBtn);
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete'; 
+                            deleteBtn.className = 'db-action-button delete';
+                            deleteBtn.onclick = () => deleteMotivation(mot.id, level); 
+                            buttonsDiv.appendChild(deleteBtn);
+                            li.appendChild(buttonsDiv); 
+                            ul.appendChild(li); 
+                        });
+                    }
+                }
+            }
+            function updateMotivationLevelDescription() {
+                const selectedLevel = motivationLevelSelect.value;
+                if (motivationDefinitions[selectedLevel]) {
+                    const conciseDef = motivationDefinitions[selectedLevel].concise;
+                    const fullDef = motivationDefinitions[selectedLevel].full;
+                    motivationLevelDescription.textContent = conciseDef;
+                    // Store definitions for custom tooltip
+                    motivationLevelDescription.setAttribute('data-tooltip-definition-concise', conciseDef); 
+                    motivationLevelDescription.setAttribute('data-tooltip-definition-full', fullDef); 
+                } else {
+                    motivationLevelDescription.textContent = '';
+                    motivationLevelDescription.removeAttribute('data-tooltip-definition-concise');
+                    motivationLevelDescription.removeAttribute('data-tooltip-definition-full');
+                }
+            }
+            function updateSpeechProfileDisplay() { 
+                const profile = currentNPC.speechProfile;
+                let htmlContent = [];
+
+                if (profile.speed) {
+                    let speedText = `<strong>Speed:</strong> ${profile.speed.replace(/\b\w/g, l => l.toUpperCase())}`;
+                    if (profile.speedType) {
+                        speedText += ` (${profile.speedType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
+                    }
+                    htmlContent.push(speedText);
+                }
+                if (profile.volume) {
+                    let volumeText = `<strong>Volume:</strong> ${profile.volume.replace(/\b\w/g, l => l.toUpperCase())}`;
+                    if (profile.volumeType) {
+                        volumeText += ` (${profile.volumeType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
+                    }
+                    htmlContent.push(volumeText);
+                }
+                if (profile.tone) htmlContent.push(`<strong>Tone:</strong> ${profile.tone.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
+                if (profile.emphasis) htmlContent.push(`<strong>Emphasis:</strong> ${profile.emphasis.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
+                if (profile.pauses) htmlContent.push(`<strong>Pauses:</strong> ${profile.pauses.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
+                
+                if (profile.vocabularyCategory || profile.vocabularyExamples) {
+                    let vocabText = `<strong>Vocabulary`;
+                    if (profile.vocabularyCategory) {
+                        vocabText += ` (${profile.vocabularyCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
+                    }
+                    vocabText += `:</strong> ${profile.vocabularyExamples || 'N/A'}`;
+                    htmlContent.push(vocabText);
+                }
+
+                if (profile.metaphorsCategory || profile.metaphorsExamples) {
+                    let metaphorText = `<strong>Metaphors`;
+                     if (profile.metaphorsCategory) {
+                        metaphorText += ` (${profile.metaphorsCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
+                    }
+                    metaphorText += `:</strong> ${profile.metaphorsExamples || 'N/A'}`;
+                    htmlContent.push(metaphorText);
+                }
+
+                if (profile.speechPatterns && profile.speechPatterns.length > 0) {
+                    htmlContent.push(`<strong>Speech Patterns:</strong> ${profile.speechPatterns.map(p => p.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}`);
+                }
+                 if (profile.speechPatternsExamples) { 
+                     htmlContent.push(`<strong>Pattern Examples:</strong> ${profile.speechPatternsExamples}`);
+                }
+
+                if (htmlContent.length > 0) {
+                    speechProfileDisplayContainer.innerHTML = htmlContent.join('<br>');
+                } else {
+                    speechProfileDisplayContainer.innerHTML = '<p class="italic" style="color: #aaa;">Speech profile details will appear here once selected.</p>';
+                }
+            }
+            function updateSelectedOptionDefinition(selectElement, descriptionElement, definitionsSource) { 
+                const selectedValue = selectElement.value;
+                let definitionText = '';
+                if (selectedValue && definitionsSource && definitionsSource[selectedValue]) {
+                    definitionText = (typeof definitionsSource[selectedValue] === 'object' && definitionsSource[selectedValue]._main)
+                                           ? definitionsSource[selectedValue]._main
+                                           : definitionsSource[selectedValue];
+                }
+                descriptionElement.textContent = definitionText; 
+                // For custom tooltip on the description paragraph itself
+                if (definitionText) {
+                    descriptionElement.setAttribute('data-tooltip-definition', definitionText);
+                } else {
+                    descriptionElement.removeAttribute('data-tooltip-definition');
+                }
+            }
+
+            // --- Motivation Management Functions ---
+            function addOrUpdateMotivation() { 
+                const text = motivationTextInput.value.trim();
+                const level = motivationLevelSelect.value;
+                if (!text) { showMessage('Motivation text cannot be empty.', 'error'); motivationTextInput.focus(); return; }
+                if (editingMotivationId) {
+                    let found = false;
+                    for (const currentLevel in currentNPC.motivations) {
+                        const index = currentNPC.motivations[currentLevel].findIndex(m => m.id === editingMotivationId);
+                        if (index !== -1) {
+                            const motivationToUpdate = currentNPC.motivations[currentLevel][index];
+                            if (currentLevel === level) { motivationToUpdate.text = text; } 
+                            else { currentNPC.motivations[currentLevel].splice(index, 1); currentNPC.motivations[level].push({ id: editingMotivationId, text: text }); }
+                            found = true; break; 
+                        }
+                    }
+                    if (found) { showMessage('Motivation updated successfully!', 'success'); } 
+                    else { showMessage('Error updating motivation. ID not found.', 'error'); }
+                    resetMotivationForm(); 
+                } else {
+                    const newMotivation = { id: generateId(), text: text };
+                    currentNPC.motivations[level].push(newMotivation);
+                    showMessage(`'${text.substring(0,20)}...' added as ${level} motivation.`, 'success');
+                }
+                renderMotivations(); 
+                if (!editingMotivationId) { motivationTextInput.value = ''; }
+                motivationTextInput.focus(); 
+                if (editingMotivationId) resetMotivationForm(); 
+            }
+            function startEditMotivation(id, level, currentText) { 
+                editingMotivationId = id;
+                motivationTextInput.value = currentText;
+                motivationLevelSelect.value = level;
+                updateMotivationLevelDescription(); 
+                motivationFormTitle.textContent = 'Edit Motivation'; 
+                addOrUpdateMotivationBtn.innerHTML = '<i class="fas fa-save"></i>Update'; 
+                addOrUpdateMotivationBtn.className = 'db-button db-button-add'; // Ensure correct class for update
+                cancelEditBtn.classList.remove('hidden'); 
+                motivationTextInput.focus(); 
+            }
+            function resetMotivationForm() { 
+                editingMotivationId = null;
+                motivationTextInput.value = '';
+                motivationLevelSelect.value = 'minor'; 
+                updateMotivationLevelDescription(); 
+                motivationFormTitle.textContent = 'Add Motivation';
+                addOrUpdateMotivationBtn.innerHTML = '<i class="fas fa-plus"></i>Add';
+                addOrUpdateMotivationBtn.className = 'db-button db-button-add';
+                cancelEditBtn.classList.add('hidden'); 
+            }
+            function deleteMotivation(id, level) { 
+                const index = currentNPC.motivations[level].findIndex(mot => mot.id === id);
+                if (index > -1) {
+                    const deletedText = currentNPC.motivations[level][index].text;
+                    currentNPC.motivations[level].splice(index, 1); 
+                    renderMotivations(); 
+                    showMessage(`Motivation '${deletedText.substring(0,20)}...' deleted.`, 'info');
+                } else { showMessage('Error deleting motivation. Not found.', 'error'); }
+                if (editingMotivationId === id) { resetMotivationForm(); }
+            }
+
+            // --- Speech Profile Logic ---
+            function handleSpeedChange() { 
+                currentNPC.speechProfile.speedType = null; 
+                speedFastTypeSelect.value = ''; 
+                speedSlowTypeSelect.value = ''; 
+                updateSelectedOptionDefinition(speedFastTypeSelect, speedFastTypeDescription, speechDefinitions.speed.fast); 
+                updateSelectedOptionDefinition(speedSlowTypeSelect, speedSlowTypeDescription, speechDefinitions.speed.slow); 
+
+                if (speedFastRadio.checked) {
+                    currentNPC.speechProfile.speed = 'fast';
+                    speedFastTypeContainer.classList.remove('hidden');
+                    speedSlowTypeContainer.classList.add('hidden');
+                } else if (speedSlowRadio.checked) {
+                    currentNPC.speechProfile.speed = 'slow';
+                    speedSlowTypeContainer.classList.remove('hidden');
+                    speedFastTypeContainer.classList.add('hidden');
+                } else { 
+                    currentNPC.speechProfile.speed = null;
+                    speedFastTypeContainer.classList.add('hidden');
+                    speedSlowTypeContainer.classList.add('hidden');
+                }
+                updateSpeechProfileDisplay();
+            }
+            function handleVolumeChange() { 
+                currentNPC.speechProfile.volumeType = null; 
+                volumeLoudTypeSelect.value = ''; 
+                volumeSoftTypeSelect.value = ''; 
+                updateSelectedOptionDefinition(volumeLoudTypeSelect, volumeLoudTypeDescription, speechDefinitions.volume.loud);
+                updateSelectedOptionDefinition(volumeSoftTypeSelect, volumeSoftTypeDescription, speechDefinitions.volume.soft);
+
+                if (volumeLoudRadio.checked) {
+                    currentNPC.speechProfile.volume = 'loud';
+                    volumeLoudTypeContainer.classList.remove('hidden');
+                    volumeSoftTypeContainer.classList.add('hidden');
+                } else if (volumeSoftRadio.checked) {
+                    currentNPC.speechProfile.volume = 'soft';
+                    volumeSoftTypeContainer.classList.remove('hidden');
+                    volumeLoudTypeContainer.classList.add('hidden');
+                } else {
+                    currentNPC.speechProfile.volume = null;
+                    volumeLoudTypeContainer.classList.add('hidden');
+                    volumeSoftTypeContainer.classList.add('hidden');
+                }
+                updateSpeechProfileDisplay();
+            }
+            function updateSpeechProfileFromInput(key, value, selectElement, descriptionElement, definitionSource) { 
+                if (value === "" && (key === "speedType" || key === "volumeType" || key === "tone" || key === "emphasis" || key === "pauses" || key === "vocabularyCategory" || key === "metaphorsCategory")) {
+                    currentNPC.speechProfile[key] = null;
+                } else {
+                    currentNPC.speechProfile[key] = value;
+                }
+                if (selectElement && descriptionElement && definitionSource) {
+                    updateSelectedOptionDefinition(selectElement, descriptionElement, definitionSource);
+                }
+                updateSpeechProfileDisplay();
+            }
+            function updateSpeechPatternCheckboxes() { 
+                const selectedPatterns = [];
+                speechPatternsCheckboxesContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedPatterns.push(checkbox.value);
+                });
+                currentNPC.speechProfile.speechPatterns = selectedPatterns;
+                updateSpeechProfileDisplay();
+            }
+
+            // --- Event Handlers ---
+            npcNameInput.addEventListener('input', () => { currentNPC.name = npcNameInput.value; updateNpcDetailsDisplay(); });
+            npcDescriptionInput.addEventListener('input', () => { currentNPC.description = npcDescriptionInput.value; updateNpcDetailsDisplay(); });
+            addOrUpdateMotivationBtn.addEventListener('click', addOrUpdateMotivation);
+            cancelEditBtn.addEventListener('click', () => { resetMotivationForm(); showMessage('Edit cancelled.', 'info'); });
+            motivationLevelSelect.addEventListener('change', updateMotivationLevelDescription);
+
+            speedFastRadio.addEventListener('change', handleSpeedChange);
+            speedSlowRadio.addEventListener('change', handleSpeedChange);
+            speedFastTypeSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('speedType', e.target.value, speedFastTypeSelect, speedFastTypeDescription, speechDefinitions.speed.fast));
+            speedSlowTypeSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('speedType', e.target.value, speedSlowTypeSelect, speedSlowTypeDescription, speechDefinitions.speed.slow));
+            
+            volumeLoudRadio.addEventListener('change', handleVolumeChange);
+            volumeSoftRadio.addEventListener('change', handleVolumeChange);
+            volumeLoudTypeSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('volumeType', e.target.value, volumeLoudTypeSelect, volumeLoudTypeDescription, speechDefinitions.volume.loud));
+            volumeSoftTypeSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('volumeType', e.target.value, volumeSoftTypeSelect, volumeSoftTypeDescription, speechDefinitions.volume.soft));
+
+            speechToneSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('tone', e.target.value, speechToneSelect, speechToneDescription, speechDefinitions.tone));
+            speechEmphasisSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('emphasis', e.target.value, speechEmphasisSelect, speechEmphasisDescription, speechDefinitions.emphasis));
+            speechPausesSelect.addEventListener('change', (e) => updateSpeechProfileFromInput('pauses', e.target.value, speechPausesSelect, speechPausesDescription, speechDefinitions.pauses));
+            
+            speechVocabularyCategorySelect.addEventListener('change', (e) => updateSpeechProfileFromInput('vocabularyCategory', e.target.value, speechVocabularyCategorySelect, speechVocabularyCategoryDescription, speechDefinitions.vocabulary));
+            speechVocabularyExamplesTextarea.addEventListener('input', (e) => updateSpeechProfileFromInput('vocabularyExamples', e.target.value));
+            speechMetaphorsCategorySelect.addEventListener('change', (e) => updateSpeechProfileFromInput('metaphorsCategory', e.target.value, speechMetaphorsCategorySelect, speechMetaphorsCategoryDescription, speechDefinitions.metaphors));
+            speechMetaphorsExamplesTextarea.addEventListener('input', (e) => updateSpeechProfileFromInput('metaphorsExamples', e.target.value));
+            
+            speechPatternsCheckboxesContainer.addEventListener('change', updateSpeechPatternCheckboxes);
+            speechPatternsExamplesTextarea.addEventListener('input', (e) => updateSpeechProfileFromInput('speechPatternsExamples', e.target.value));
+
+            saveNpcBtn.addEventListener('click', () => {
+                if (!currentNPC.name && !currentNPC.description && 
+                    currentNPC.motivations.minor.length === 0 &&
+                    currentNPC.motivations.moderate.length === 0 &&
+                    currentNPC.motivations.major.length === 0 &&
+                    Object.values(currentNPC.speechProfile).every(val => val === null || val === '' || (Array.isArray(val) && val.length === 0)) 
+                    ) {
+                    showMessage('NPC is empty. Add some details before saving.', 'warning');
+                    return;
+                }
+                console.log("NPC Data:", JSON.parse(JSON.stringify(currentNPC)));
+                showMessage('NPC data logged to the browser console!', 'info');
+            });
+
+            // --- Initial setup ---
+            document.body.addEventListener('mouseover', (event) => {
+                const target = event.target;
+                let tooltipText = null;
+
+                if (target.matches('option') && target.hasAttribute('data-definition')) {
+                    tooltipText = target.getAttribute('data-definition');
+                } else if (target.hasAttribute('data-tooltip-key')) {
+                    tooltipText = getDefinitionFromKey(target.getAttribute('data-tooltip-key'));
+                } else if (target.id === 'motivationLevelDescription') {
+                     tooltipText = target.getAttribute('data-tooltip-definition-full');
+                } else if (target.classList.contains('selected-option-description') && target.hasAttribute('data-tooltip-definition')) {
+                    tooltipText = target.getAttribute('data-tooltip-definition');
+                }
+                
+                if (tooltipText) {
+                    showCustomTooltip(event, tooltipText);
+                }
+            });
+
+            document.body.addEventListener('mouseout', hideCustomTooltip);
+            document.body.addEventListener('mousemove', (event) => {
+                if (customTooltipElement.style.display === 'block') {
+                    let x = event.pageX + 15;
+                    let y = event.pageY + 15;
+                    const screenWidth = window.innerWidth;
+                    const screenHeight = window.innerHeight;
+                    const tooltipRect = customTooltipElement.getBoundingClientRect(); 
+                    if (x + tooltipRect.width > screenWidth -10) x = event.pageX - tooltipRect.width - 15;
+                    if (y + tooltipRect.height > screenHeight -10) y = event.pageY - tooltipRect.height - 15;
+                    if (x < 10) x = 10;
+                    if (y < 10) y = 10;
+                    customTooltipElement.style.left = `${x}px`;
+                    customTooltipElement.style.top = `${y}px`;
+                }
+            });
+
+            populateSelectWithOptions(speedFastTypeSelect, speechDefinitions.speed.fast, 'speed.fast');
+            populateSelectWithOptions(speedSlowTypeSelect, speechDefinitions.speed.slow, 'speed.slow');
+            populateSelectWithOptions(volumeLoudTypeSelect, speechDefinitions.volume.loud, 'volume.loud');
+            populateSelectWithOptions(volumeSoftTypeSelect, speechDefinitions.volume.soft, 'volume.soft');
+            populateSelectWithOptions(speechToneSelect, speechDefinitions.tone, 'tone');
+            populateSelectWithOptions(speechEmphasisSelect, speechDefinitions.emphasis, 'emphasis');
+            populateSelectWithOptions(speechPausesSelect, speechDefinitions.pauses, 'pauses');
+            populateSelectWithOptions(speechVocabularyCategorySelect, speechDefinitions.vocabulary, 'vocabulary');
+            populateSelectWithOptions(speechMetaphorsCategorySelect, speechDefinitions.metaphors, 'metaphors');
+            populateCheckboxes(speechPatternsCheckboxesContainer, speechDefinitions.speech_patterns, 'speechPattern', 'speech_patterns');
+
+            updateNpcDetailsDisplay();
+            renderMotivations();
+            updateMotivationLevelDescription(); 
+            updateSpeechProfileDisplay(); 
+
+            updateSelectedOptionDefinition(speedFastTypeSelect, speedFastTypeDescription, speechDefinitions.speed.fast);
+            updateSelectedOptionDefinition(speedSlowTypeSelect, speedSlowTypeDescription, speechDefinitions.speed.slow);
+            updateSelectedOptionDefinition(volumeLoudTypeSelect, volumeLoudTypeDescription, speechDefinitions.volume.loud);
+            updateSelectedOptionDefinition(volumeSoftTypeSelect, volumeSoftTypeDescription, speechDefinitions.volume.soft);
+            updateSelectedOptionDefinition(speechToneSelect, speechToneDescription, speechDefinitions.tone);
+            updateSelectedOptionDefinition(speechEmphasisSelect, speechEmphasisDescription, speechDefinitions.emphasis);
+            updateSelectedOptionDefinition(speechPausesSelect, speechPausesDescription, speechDefinitions.pauses);
+            updateSelectedOptionDefinition(speechVocabularyCategorySelect, speechVocabularyCategoryDescription, speechDefinitions.vocabulary);
+            updateSelectedOptionDefinition(speechMetaphorsCategorySelect, speechMetaphorsCategoryDescription, speechDefinitions.metaphors);
+        });
+    </script>
+</body>
+</html>
