@@ -16,13 +16,12 @@
             color: #f5f5f5;
         }
 
-        /* Main page container - adapted from NPC builder's Tailwind container */
-        .db-container { /* Renamed to avoid conflict if Tailwind's 'container' is used elsewhere */
+        .db-container {
             background: #333;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 90%;
-            max-width: 900px; /* Increased slightly for NPC builder layout */
+            max-width: 900px; 
             padding: 20px;
             margin: 20px auto;
         }
@@ -33,102 +32,104 @@
         }
 
         .branding-logo {
-            max-width: 200px; /* Adjusted for NPC builder title */
+            max-width: 200px; 
             height: auto;
-            display: block; /* Changed to block for easier centering */
-            margin: 0 auto 10px auto; /* Added bottom margin */
+            display: block; 
+            margin: 0 auto 10px auto; 
         }
 
-        /* Main page title - H1 */
         .db-main-title {
-            font-size: 28px; /* Was 2.25rem (36px) via text-4xl */
-            margin-bottom: 20px; /* Was mb-8 (32px) */
+            font-size: 28px; 
+            margin-bottom: 20px; 
             color: #ffdd57;
             text-align: center;
-            font-weight: bold; /* Tailwind's font-bold */
+            font-weight: bold; 
         }
         
-        /* Section cards */
         .db-section-card {
             background: #444;
             border: 1px solid #555;
-            border-radius: 8px; /* Was rounded-xl */
-            padding: 1.5rem; /* Was p-6 */
-            margin-bottom: 1.5rem; /* Was mb-8 */
+            border-radius: 8px; 
+            padding: 1.5rem; 
+            margin-bottom: 1.5rem; 
         }
 
         .db-section-card h2,
-        .db-section-card h3#motivationFormTitle { /* Target specific h3 */
-            font-size: 1.75rem; /* Was text-2xl (1.5rem) */
-            font-weight: 600; /* Tailwind's font-semibold */
+        .db-section-card h3#motivationFormTitle { 
+            font-size: 1.75rem; 
+            font-weight: 600; 
             color: #ffdd57;
             margin-top: 0;
-            margin-bottom: 1rem; /* Was mb-5 */
+            margin-bottom: 1rem; 
             border-bottom: 2px solid #555;
-            padding-bottom: 0.5rem; /* Was pb-3 */
+            padding-bottom: 0.5rem; 
         }
-         .db-section-card h3 { /* General h3 within cards, e.g., for output sections */
-            font-size: 1.25rem; /* Tailwind text-xl */
+         .db-section-card h3 { 
+            font-size: 1.25rem; 
             font-weight: 600;
-            color: #ffdd57; /* Adjusted for better visibility */
-            margin-bottom: 0.75rem; /* Tailwind mb-3 */
+            color: #ffdd57; 
+            margin-bottom: 0.75rem; 
         }
-        .db-section-card h4 { /* For motivation list titles */
-            font-size: 1.125rem; /* Tailwind text-lg */
-            font-weight: 500; /* Tailwind font-medium */
-            color: #ffdd57; /* Adjusted */
+        .db-section-card h4 { 
+            font-size: 1.125rem; 
+            font-weight: 500; 
+            color: #ffdd57; 
         }
 
-
-        /* Form Elements */
         .db-label {
             display: block;
-            font-weight: 500; /* Tailwind font-medium */
+            font-weight: 500; 
             color: #f5f5f5;
             margin-bottom: 0.25rem; /* Tailwind mb-1 */
         }
 
-        .db-input, .db-textarea, .db-select {
+        .db-input, .db-textarea, .db-select, .db-file-input {
             width: 100%;
             background-color: #2a2a2a;
             color: #f5f5f5;
             border: 1px solid #555;
-            border-radius: 5px; /* Was rounded-lg */
-            padding: 10px; /* Was p-3 */
-            margin-bottom: 1rem; 
+            border-radius: 5px; 
+            padding: 10px; 
+            /* margin-bottom: 1rem; REMOVED for more granular control */
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
             font-size: 1em;
             transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
+        .db-file-input { 
+             padding: 0.5rem 10px;
+             margin-bottom: 0.75rem; /* Tailwind mb-3, for spacing before its button */
+        }
         .db-input::placeholder, .db-textarea::placeholder {
-            color: #888; /* Placeholder text color */
+            color: #888; 
+        }
+        /* Add bottom margin to other inputs if they are followed by non-button elements or for general spacing */
+        .db-input, .db-textarea, .db-select {
+            margin-bottom: 1rem; /* Default spacing for most inputs */
         }
 
-        .db-input:focus, .db-textarea:focus, .db-select:focus {
+
+        .db-input:focus, .db-textarea:focus, .db-select:focus, .db-file-input:focus {
             outline: none;
             border-color: #ffdd57;
             box-shadow: 0 0 0 2px rgba(255, 221, 87, 0.5);
         }
         .db-textarea {
-            min-height: 80px; /* Was rows="4" or rows="3" */
+            min-height: 80px; 
             resize: vertical;
         }
 
-        /* Hint text below inputs (like motivation level description) */
         #motivationLevelDescription, .selected-option-description {
             font-size: 0.875rem;
             color: #aaa; 
-            margin-top: 0.25rem; /* Adjusted from 0.5rem */
+            margin-top: 0.25rem; 
             font-style: italic;
             min-height: 1.25rem;
             line-height: 1.4;
         }
-        #motivationLevelDescription { cursor: help; } /* Keep cursor for this specific one */
+        #motivationLevelDescription { cursor: help; } 
         .selected-option-description { cursor: default; }
 
-
-        /* Buttons */
         .db-button {
             background: #222;
             color: #fff;
@@ -137,42 +138,54 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 600; /* Tailwind font-semibold */
-            margin: 5px 0; /* Adjusted margin */
+            font-weight: 600; 
+            margin: 5px 0; 
             transition: background-color 0.2s ease-in-out;
-            width: 100%; /* Make buttons full width by default in their column */
-            display: inline-flex; /* For icon alignment */
+            width: 100%; 
+            display: inline-flex; 
             align-items: center;
             justify-content: center;
         }
         .db-button:hover {
             background: #e65c54; 
         }
-        .db-button i { /* Icon styling within buttons */
+        .db-button i { 
             margin-right: 0.5rem;
         }
         
-        /* Specific button types - can override base .db-button */
-        .db-button-add { /* For Add/Update Motivation */
-            background-color: #38a169; /* Greenish, like download-button */
+        .db-button-add { 
+            background-color: #38a169; 
         }
         .db-button-add:hover {
             background-color: #2f855a;
         }
-        .db-button-cancel { /* For Cancel Edit */
+        .db-button-cancel { 
             background-color: #666;
         }
         .db-button-cancel:hover {
             background-color: #555;
         }
-        .db-button-save { /* For Save NPC */
-             background-color: #007bff; /* Blue, like print-button */
+        
+        .download-button {
+            background: #38a169; 
         }
-        .db-button-save:hover {
-            background-color: #0056b3;
+        .download-button:hover {
+            background: #2f855a;
+        }
+        .upload-button {
+            background: #dd6b20; 
+        }
+        .upload-button:hover {
+            background: #c05621;
+        }
+        .print-button {
+            background: #007bff; 
+        }
+        .print-button:hover {
+            background: #0056b3;
         }
 
-        /* Small action buttons (edit/delete motivation) */
+
         .db-action-button {
             padding: 6px 10px;
             font-size: 0.9em;
@@ -181,20 +194,19 @@
             border-radius: 4px;
         }
         .db-action-button.edit {
-            background-color: #3b82f6; /* Blue */
+            background-color: #3b82f6; 
         }
         .db-action-button.edit:hover {
             background-color: #2563eb;
         }
         .db-action-button.delete {
-            background-color: #e65c54; /* Red */
+            background-color: #e65c54; 
         }
         .db-action-button.delete:hover {
             background-color: #c53030;
         }
 
-        /* Motivation List Items */
-        .db-list-item { /* Replaces .motivation-item */
+        .db-list-item { 
             background-color: #505050; 
             padding: 0.75rem;
             border-radius: 5px;
@@ -203,21 +215,19 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid #666;
-            color: #f5f5f5; /* Ensure text inside is light */
+            color: #f5f5f5; 
         }
-        .db-list-item .motivation-text { /* Ensure text inside is light */
+        .db-list-item .motivation-text { 
              color: #f5f5f5;
         }
-        .db-list-item .italic { /* For placeholder text */
+        .db-list-item .italic { 
             color: #aaa !important;
         }
 
-
-        /* Custom Tooltip */
         #customTooltip {
             position: absolute;
             display: none;
-            background-color: #222; /* Darker background */
+            background-color: #222; 
             color: #f5f5f5;
             padding: 8px 12px;
             border-radius: 6px;
@@ -225,12 +235,11 @@
             z-index: 1000;
             max-width: 300px; 
             word-wrap: break-word;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Slightly stronger shadow */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3); 
             pointer-events: none; 
-            border: 1px solid #555; /* Add border */
+            border: 1px solid #555; 
         }
 
-        /* Message Box */
         #messageBox {
             position: fixed;
             top: 1rem;
@@ -238,7 +247,7 @@
             z-index: 1000; 
             width: 300px;
         }
-        .app-message { /* Using Dungeonbrew's class name */
+        .app-message { 
             padding: 0.75rem;
             margin-bottom: 0.5rem;
             border-radius: 5px; 
@@ -251,12 +260,10 @@
         .app-message.type-info { background-color: #007bff; } 
         .app-message.type-success { background-color: #28a745; } 
         .app-message.type-error { background-color: #dc3545; } 
-        .app-message.type-warning { background-color: #ffc107; color: #333; } /* Added warning */
+        .app-message.type-warning { background-color: #ffc107; color: #333; } 
 
-
-        /* Speech Profile specific styling */
         .speech-profile-label, .speech-profile-label-main { cursor: help; }
-        .speech-profile-label { border-bottom: 1px dotted #888; } /* Lighter dotted line */
+        .speech-profile-label { border-bottom: 1px dotted #888; } 
         
         .speech-section-grid {
             display: grid;
@@ -273,7 +280,6 @@
         .checkbox-group input[type="checkbox"] { margin-right: 0.25rem; accent-color: #ffdd57; }
         .speech-column-group > div:not(:last-child) { margin-bottom: 1.5rem; }
 
-        /* Output text colors */
         #outputNpcName { color: #ffdd57; }
         #outputNpcDescription { color: #f5f5f5; }
         #speechProfileDisplayContainer { color: #f5f5f5; }
@@ -281,8 +287,6 @@
         #outputMotivations ul { color: #f5f5f5; }
         #outputMotivations .italic { color: #aaa !important; }
 
-
-        /* Print styles - largely kept from user's example */
         @media print {
             body {
                 background-color: #ffffff !important; 
@@ -290,61 +294,38 @@
                 font-size: 11pt; 
             }
             .db-container {
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
+                width: 100% !important; max-width: none !important; margin: 0 !important;
+                padding: 0 !important; box-shadow: none !important; border-radius: 0 !important;
                 background: #fff !important;
             }
-            .branding, 
-            #messageBox, 
-            .db-button, /* Hide all main buttons */
-            .db-action-button, /* Hide edit/delete motivation buttons */
-            #motivationFormTitle + .grid button /* Hide Add/Cancel for motivation */
+            .branding, #messageBox, #customTooltip,
+            .db-section-card:not(#npcOutput), 
+            button:not(#printNpcBtn) 
              {
                 display: none !important; 
             }
-            .db-section-card {
-                border: 1px solid #ccc !important;
+            section:not(#npcOutput) button { display: none !important; }
+
+
+            #npcOutput { 
+                display: block !important;
+                border: none !important; 
                 box-shadow: none !important;
-                padding: 1rem;
-                margin-bottom: 1rem;
-                page-break-inside: avoid;
+                padding: 0 !important; 
+                margin: 0 !important;
                 background: #fff !important;
             }
-            .db-section-card h2, .db-section-card h3, .db-section-card h4 {
+            #npcOutput h2, #npcOutput h3, #npcOutput h4 {
                 color: #000 !important;
                 border-bottom: 1px solid #ccc !important;
             }
-            .db-label { color: #000 !important; }
-            .db-input, .db-textarea, .db-select {
-                background-color: #fdfdfd !important; 
-                color: #000 !important;
-                border: 1px solid #ddd !important;
-            }
-            .db-list-item {
-                background-color: #f9f9f9 !important;
-                border: 1px solid #eee !important;
+            #outputNpcName, #outputNpcDescription, 
+            #speechProfileDisplayContainer, #speechProfileDisplayContainer strong,
+            #outputMotivations ul, #outputMotivations .db-list-item .motivation-text {
                 color: #000 !important;
             }
-             .db-list-item .motivation-text { color: #000 !important; }
-            .db-main-title { color: #000 !important; font-size: 22pt; }
-            /* Hide input elements in print by default, show only their values if needed (more complex) */
-            .db-input, .db-select, .db-textarea, .radio-group, .checkbox-group,
-            #speedFastTypeContainer, #speedSlowTypeContainer, 
-            #volumeLoudTypeContainer, #volumeSoftTypeContainer,
-            .conditional-dropdown-container p /* Hide selected option descriptions in form */
-             { display: none !important; }
-            
-            /* Show only the output sections clearly */
-            #npcDetailsDisplay, #outputSpeechProfile, #outputMotivations { display: block !important; }
-            #outputNpcDescription, #speechProfileDisplayContainer, #outputMotivations ul { color: #000 !important; }
-            #outputNpcName { color: #000 !important; }
-             #speechProfileDisplayContainer strong { color: #000 !important; }
+             #outputMotivations .italic { color: #555 !important; }
         }
-
     </style>
 </head>
 <body>
@@ -353,7 +334,7 @@
     <div class="db-container">
         <div class="branding">
             <a href="https://www.patreon.com/DungeonBrew" target="_blank" rel="noopener noreferrer">
-                <img src="Updated Logo.png" alt="Dungeon Brew Logo" class="branding-logo">
+                <img src="https://placehold.co/200x60/333333/FFDD57?text=Dungeonbrew&font=arial" alt="Dungeon Brew Logo" class="branding-logo">
             </a>
         </div>
         <h1 class="db-main-title">NPC Builder</h1>
@@ -517,26 +498,44 @@
                         <div>
                             <h4>Minor Motivations:</h4>
                             <ul id="minorMotivationsList" class="list-none pl-0 space-y-2 text-sm">
-                                <li class="italic">No minor motivations added yet.</li>
+                                <li class="italic db-list-item">No minor motivations added yet.</li>
                             </ul>
                         </div>
                         <div>
                             <h4>Moderate Motivations:</h4>
                             <ul id="moderateMotivationsList" class="list-none pl-0 space-y-2 text-sm">
-                                <li class="italic">No moderate motivations added yet.</li>
+                                <li class="italic db-list-item">No moderate motivations added yet.</li>
                             </ul>
                         </div>
                         <div>
                             <h4>Major Motivations:</h4>
                             <ul id="majorMotivationsList" class="list-none pl-0 space-y-2 text-sm">
-                                 <li class="italic">No major motivations added yet.</li>
+                                 <li class="italic db-list-item">No major motivations added yet.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <button id="saveNpcBtn" class="db-button db-button-save mt-8">
-                    <i class="fas fa-save"></i>Save NPC (Logs to Console)
-                </button>
+            </section>
+
+            <section id="manageDataSection" class="db-section-card">
+                <h2>Manage NPC Data</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+                    <div> <label for="uploadNpcFile" class="db-label">Upload NPC File (JSON):</label>
+                        <input type="file" id="uploadNpcFile" accept=".json" class="db-file-input">
+                        <button type="button" id="loadNpcBtn" class="db-button upload-button">
+                            <i class="fas fa-upload"></i> Upload and Populate
+                        </button>
+                    </div>
+                    <div class="flex flex-col justify-end h-full"> <div class="space-y-3"> 
+                            <button type="button" id="downloadNpcBtn" class="db-button download-button">
+                                <i class="fas fa-download"></i> Download NPC as JSON
+                            </button>
+                            <button type="button" id="printNpcBtn" class="db-button print-button">
+                                <i class="fas fa-print"></i> Print NPC Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
 
@@ -544,6 +543,8 @@
     </div>
 
     <script>
+        // All JavaScript code from v1.15 (NPC Builder - Data Management & Print)
+        // is assumed to be here, unchanged.
         document.addEventListener('DOMContentLoaded', () => {
             // DOM Elements
             const npcNameInput = document.getElementById('npcName');
@@ -584,7 +585,7 @@
             const speechMetaphorsExamplesTextarea = document.getElementById('speechMetaphorsExamples');
             const speechPatternsCheckboxesContainer = document.getElementById('speechPatternsCheckboxes');
             const speechPatternsExamplesTextarea = document.getElementById('speechPatternsExamples');
-            const saveNpcBtn = document.getElementById('saveNpcBtn');
+            
             const outputNpcName = document.getElementById('outputNpcName');
             const outputNpcDescription = document.getElementById('outputNpcDescription');
             const speechProfileDisplayContainer = document.getElementById('speechProfileDisplayContainer');
@@ -592,11 +593,14 @@
             const moderateMotivationsList = document.getElementById('moderateMotivationsList');
             const majorMotivationsList = document.getElementById('majorMotivationsList');
             const messageBox = document.getElementById('messageBox');
-            // const messageText = document.getElementById('messageText'); // Not used if messageBox is directly populated
             const customTooltipElement = document.getElementById('customTooltip');
 
+            const downloadNpcBtn = document.getElementById('downloadNpcBtn');
+            const uploadNpcFile = document.getElementById('uploadNpcFile');
+            const loadNpcBtn = document.getElementById('loadNpcBtn');
+            const printNpcBtn = document.getElementById('printNpcBtn');
 
-            // --- Definitions ---
+
             const motivationDefinitions = {
                 minor: { concise: "Short-term objectives; immediate needs or tasks. Quickly resolved.", full: "These represent short-term objectives for your NPC, such as ensuring a timely delivery of goods or resolving a recent squabble with a neighbor. They are immediate concerns or tasks that demand the NPC's attention. These motivations may be resolved relatively quickly, either through the NPC's own efforts or with the help of the PCs. Once fulfilled, minor motivations give way to new challenges or opportunities, in the same way they do in our own lives. Short term goals often represent the needs of the NPC." },
                 moderate: { concise: "Mid-range goals; require sustained effort and resources. May involve multiple steps or obstacles.", full: "These are mid-range objectives that your NPC aims to achieve, such as establishing a successful trade partnership with a neighboring town or securing a political alliance to bolster their influence. These motivations typically require more sustained effort and resources to accomplish compared to minor motivations. They may involve multiple steps or require the NPC to overcome significant obstacles along the way. As a result, these motivations can allow for PCs to be involved with the NPC for longer periods of time as they work through the various obstacles to help the NPC achieve their goal. Once achieved, moderate motivations can lead to new opportunities or challenges for the NPC to pursue, which may be as simple as moving on to the next trade partnership but could involve dealing with the persistent threat of bandits along their trade routes." },
@@ -613,110 +617,64 @@
                 speech_patterns: { _main: "Characteristic ways the NPC forms sentences or phrases.", repetition: "Repeating words or phrases because the character is obsessive, nervous, or excited. (e.g., Gloating: 'Well, well, well...'; Insecure: 'Sorry, sorry...'; Exasperation: 'It isn’t right! I thought we had this…listen, it isn’t right.')", phrasal_verbs: "Slang verbs (e.g., Noble: 'Proceed' not 'go on'; Rural: 'Looked after' not 'cared for'; Educated: 'Encountered' not 'run into').", varied_sentence_structure: "Length and / or complexity. Short & direct (e.g., 'We work hard. We live simple.') vs. long & elaborate (e.g., 'Our community has always been one of diligence...')." }
             };
 
-            // --- NPC Data Structure ---
             let currentNPC = {
-                name: '',
-                description: '',
-                motivations: { 
-                    minor: [],
-                    moderate: [],
-                    major: []
-                },
-                speechProfile: { 
-                    speed: null, 
-                    speedType: null, 
-                    volume: null, 
-                    volumeType: null, 
-                    tone: null,
-                    emphasis: null,
-                    pauses: null,
-                    vocabularyCategory: null,
-                    vocabularyExamples: '',
-                    metaphorsCategory: null,
-                    metaphorsExamples: '',
-                    speechPatterns: [], 
-                    speechPatternsExamples: ''
-                }
+                name: '', description: '',
+                motivations: { minor: [], moderate: [], major: [] },
+                speechProfile: { speed: null, speedType: null, volume: null, volumeType: null, tone: null, emphasis: null, pauses: null, vocabularyCategory: null, vocabularyExamples: '', metaphorsCategory: null, metaphorsExamples: '', speechPatterns: [], speechPatternsExamples: '' }
             };
             let editingMotivationId = null; 
 
-            // --- Custom Tooltip Logic ---
             function showCustomTooltip(event, text) {
                 if (!text) return;
                 customTooltipElement.innerHTML = text;
                 customTooltipElement.style.display = 'block';
-                let x = event.pageX + 15; // Offset from cursor
-                let y = event.pageY + 15; // Offset from cursor
-
+                let x = event.pageX + 15; 
+                let y = event.pageY + 15; 
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
                 const tooltipRect = customTooltipElement.getBoundingClientRect();
-
-                if (x + tooltipRect.width > screenWidth - 10) { // 10px buffer from edge
-                    x = event.pageX - tooltipRect.width - 15; // Place to the left
-                }
-                if (y + tooltipRect.height > screenHeight - 10) {
-                    y = event.pageY - tooltipRect.height - 15; // Place above
-                }
-                if (x < 10) x = 10; // Prevent going off left edge
-                if (y < 10) y = 10; // Prevent going off top edge
-
+                if (x + tooltipRect.width > screenWidth - 10) { x = event.pageX - tooltipRect.width - 15; }
+                if (y + tooltipRect.height > screenHeight - 10) { y = event.pageY - tooltipRect.height - 15; }
+                if (x < 10) x = 10; 
+                if (y < 10) y = 10; 
                 customTooltipElement.style.left = `${x}px`;
                 customTooltipElement.style.top = `${y}px`;
             }
-
-            function hideCustomTooltip() {
-                customTooltipElement.style.display = 'none';
-            }
-            
+            function hideCustomTooltip() { customTooltipElement.style.display = 'none'; }
             function getDefinitionFromKey(keyString) {
                 if (!keyString) return null;
                 const keys = keyString.split('.');
-                let current = speechDefinitions; // Assuming speechDefinitions is the primary source for these keys
+                let current = speechDefinitions; 
                 for (const key of keys) {
-                    if (current && typeof current === 'object' && key in current) {
-                        current = current[key];
-                    } else {
-                        return null; 
-                    }
+                    if (current && typeof current === 'object' && key in current) { current = current[key]; } 
+                    else { return null; }
                 }
-                // If the final resolved value is an object with _main, use that, otherwise use the value itself (for direct definitions)
                 return (typeof current === 'object' && current._main) ? current._main : current;
             }
-
-
-            // --- Utility Functions ---
             function showMessage(message, type = 'info', duration = 3000) { 
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `app-message type-${type}`;
                 messageDiv.textContent = message;
                 messageBox.appendChild(messageDiv);
-
                 setTimeout(() => {
                     messageDiv.style.opacity = '0';
-                    setTimeout(() => {
-                        messageDiv.remove();
-                    }, 500); // Remove after fade out
+                    setTimeout(() => { messageDiv.remove(); }, 500); 
                 }, duration);
             }
             function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
-            // --- Populate Dropdowns & Checkboxes ---
             function populateSelectWithOptions(selectElement, optionsObject, definitionBaseKey, mainDefinitionKey = '_main') {
                 Object.keys(optionsObject).forEach(key => {
                     if (key !== mainDefinitionKey) { 
                         const option = document.createElement('option');
                         option.value = key;
                         option.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        
                         const definition = (typeof optionsObject[key] === 'object' && optionsObject[key]._main) ? optionsObject[key]._main : optionsObject[key];
-                        option.setAttribute('data-definition', definition || ''); // For custom tooltip on hover over option
-                        
+                        option.setAttribute('data-definition', definition || ''); 
                         selectElement.appendChild(option);
                     }
                 });
             }
-            
             function populateCheckboxes(containerElement, optionsObject, groupName, definitionBaseKey) {
                 containerElement.innerHTML = ''; 
                 Object.keys(optionsObject).forEach(key => {
@@ -729,20 +687,17 @@
                     checkbox.name = groupName;
                     checkbox.value = key;
                     checkbox.className = 'mr-2 h-4 w-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500';
-                    
                     const label = document.createElement('label');
                     label.htmlFor = `${groupName}-${key}`;
                     label.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    label.className = 'text-sm'; // Removed speech-profile-label, tooltip via event delegation
+                    label.className = 'text-sm'; 
                     label.setAttribute('data-tooltip-key', `${definitionBaseKey}.${key}`);
-                                        
                     wrapper.appendChild(checkbox);
                     wrapper.appendChild(label);
                     containerElement.appendChild(wrapper);
                 });
             }
 
-            // --- Update Display Functions ---
             function updateNpcDetailsDisplay() { 
                 outputNpcName.textContent = currentNPC.name || 'NPC Name Will Appear Here';
                 outputNpcDescription.textContent = currentNPC.description || 'NPC description will appear here.';
@@ -764,7 +719,6 @@
                             textSpan.textContent = mot.text;
                             li.appendChild(textSpan);
                             const buttonsDiv = document.createElement('div');
-                            // buttonsDiv.className = 'action-buttons'; // Not needed if styling buttons directly
                             const editBtn = document.createElement('button');
                             editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit'; 
                             editBtn.className = 'db-action-button edit';
@@ -787,7 +741,6 @@
                     const conciseDef = motivationDefinitions[selectedLevel].concise;
                     const fullDef = motivationDefinitions[selectedLevel].full;
                     motivationLevelDescription.textContent = conciseDef;
-                    // Store definitions for custom tooltip
                     motivationLevelDescription.setAttribute('data-tooltip-definition-concise', conciseDef); 
                     motivationLevelDescription.setAttribute('data-tooltip-definition-full', fullDef); 
                 } else {
@@ -799,74 +752,29 @@
             function updateSpeechProfileDisplay() { 
                 const profile = currentNPC.speechProfile;
                 let htmlContent = [];
-
-                if (profile.speed) {
-                    let speedText = `<strong>Speed:</strong> ${profile.speed.replace(/\b\w/g, l => l.toUpperCase())}`;
-                    if (profile.speedType) {
-                        speedText += ` (${profile.speedType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
-                    }
-                    htmlContent.push(speedText);
-                }
-                if (profile.volume) {
-                    let volumeText = `<strong>Volume:</strong> ${profile.volume.replace(/\b\w/g, l => l.toUpperCase())}`;
-                    if (profile.volumeType) {
-                        volumeText += ` (${profile.volumeType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
-                    }
-                    htmlContent.push(volumeText);
-                }
+                if (profile.speed) { let speedText = `<strong>Speed:</strong> ${profile.speed.replace(/\b\w/g, l => l.toUpperCase())}`; if (profile.speedType) { speedText += ` (${profile.speedType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`; } htmlContent.push(speedText); }
+                if (profile.volume) { let volumeText = `<strong>Volume:</strong> ${profile.volume.replace(/\b\w/g, l => l.toUpperCase())}`; if (profile.volumeType) { volumeText += ` (${profile.volumeType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`; } htmlContent.push(volumeText); }
                 if (profile.tone) htmlContent.push(`<strong>Tone:</strong> ${profile.tone.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
                 if (profile.emphasis) htmlContent.push(`<strong>Emphasis:</strong> ${profile.emphasis.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
                 if (profile.pauses) htmlContent.push(`<strong>Pauses:</strong> ${profile.pauses.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
-                
-                if (profile.vocabularyCategory || profile.vocabularyExamples) {
-                    let vocabText = `<strong>Vocabulary`;
-                    if (profile.vocabularyCategory) {
-                        vocabText += ` (${profile.vocabularyCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
-                    }
-                    vocabText += `:</strong> ${profile.vocabularyExamples || 'N/A'}`;
-                    htmlContent.push(vocabText);
-                }
-
-                if (profile.metaphorsCategory || profile.metaphorsExamples) {
-                    let metaphorText = `<strong>Metaphors`;
-                     if (profile.metaphorsCategory) {
-                        metaphorText += ` (${profile.metaphorsCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`;
-                    }
-                    metaphorText += `:</strong> ${profile.metaphorsExamples || 'N/A'}`;
-                    htmlContent.push(metaphorText);
-                }
-
-                if (profile.speechPatterns && profile.speechPatterns.length > 0) {
-                    htmlContent.push(`<strong>Speech Patterns:</strong> ${profile.speechPatterns.map(p => p.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}`);
-                }
-                 if (profile.speechPatternsExamples) { 
-                     htmlContent.push(`<strong>Pattern Examples:</strong> ${profile.speechPatternsExamples}`);
-                }
-
-                if (htmlContent.length > 0) {
-                    speechProfileDisplayContainer.innerHTML = htmlContent.join('<br>');
-                } else {
-                    speechProfileDisplayContainer.innerHTML = '<p class="italic" style="color: #aaa;">Speech profile details will appear here once selected.</p>';
-                }
+                if (profile.vocabularyCategory || profile.vocabularyExamples) { let vocabText = `<strong>Vocabulary`; if (profile.vocabularyCategory) { vocabText += ` (${profile.vocabularyCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`; } vocabText += `:</strong> ${profile.vocabularyExamples || 'N/A'}`; htmlContent.push(vocabText); }
+                if (profile.metaphorsCategory || profile.metaphorsExamples) { let metaphorText = `<strong>Metaphors`; if (profile.metaphorsCategory) { metaphorText += ` (${profile.metaphorsCategory.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})`; } metaphorText += `:</strong> ${profile.metaphorsExamples || 'N/A'}`; htmlContent.push(metaphorText); }
+                if (profile.speechPatterns && profile.speechPatterns.length > 0) { htmlContent.push(`<strong>Speech Patterns:</strong> ${profile.speechPatterns.map(p => p.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}`); }
+                if (profile.speechPatternsExamples) { htmlContent.push(`<strong>Pattern Examples:</strong> ${profile.speechPatternsExamples}`); }
+                if (htmlContent.length > 0) { speechProfileDisplayContainer.innerHTML = htmlContent.join('<br>'); } 
+                else { speechProfileDisplayContainer.innerHTML = '<p class="italic" style="color: #aaa;">Speech profile details will appear here once selected.</p>'; }
             }
             function updateSelectedOptionDefinition(selectElement, descriptionElement, definitionsSource) { 
                 const selectedValue = selectElement.value;
                 let definitionText = '';
                 if (selectedValue && definitionsSource && definitionsSource[selectedValue]) {
-                    definitionText = (typeof definitionsSource[selectedValue] === 'object' && definitionsSource[selectedValue]._main)
-                                           ? definitionsSource[selectedValue]._main
-                                           : definitionsSource[selectedValue];
+                    definitionText = (typeof definitionsSource[selectedValue] === 'object' && definitionsSource[selectedValue]._main) ? definitionsSource[selectedValue]._main : definitionsSource[selectedValue];
                 }
                 descriptionElement.textContent = definitionText; 
-                // For custom tooltip on the description paragraph itself
-                if (definitionText) {
-                    descriptionElement.setAttribute('data-tooltip-definition', definitionText);
-                } else {
-                    descriptionElement.removeAttribute('data-tooltip-definition');
-                }
+                if (definitionText) { descriptionElement.setAttribute('data-tooltip-definition', definitionText); } 
+                else { descriptionElement.removeAttribute('data-tooltip-definition'); }
             }
 
-            // --- Motivation Management Functions ---
             function addOrUpdateMotivation() { 
                 const text = motivationTextInput.value.trim();
                 const level = motivationLevelSelect.value;
@@ -902,7 +810,7 @@
                 updateMotivationLevelDescription(); 
                 motivationFormTitle.textContent = 'Edit Motivation'; 
                 addOrUpdateMotivationBtn.innerHTML = '<i class="fas fa-save"></i>Update'; 
-                addOrUpdateMotivationBtn.className = 'db-button db-button-add'; // Ensure correct class for update
+                addOrUpdateMotivationBtn.className = 'db-button db-button-add'; 
                 cancelEditBtn.classList.remove('hidden'); 
                 motivationTextInput.focus(); 
             }
@@ -927,27 +835,15 @@
                 if (editingMotivationId === id) { resetMotivationForm(); }
             }
 
-            // --- Speech Profile Logic ---
             function handleSpeedChange() { 
                 currentNPC.speechProfile.speedType = null; 
                 speedFastTypeSelect.value = ''; 
                 speedSlowTypeSelect.value = ''; 
                 updateSelectedOptionDefinition(speedFastTypeSelect, speedFastTypeDescription, speechDefinitions.speed.fast); 
                 updateSelectedOptionDefinition(speedSlowTypeSelect, speedSlowTypeDescription, speechDefinitions.speed.slow); 
-
-                if (speedFastRadio.checked) {
-                    currentNPC.speechProfile.speed = 'fast';
-                    speedFastTypeContainer.classList.remove('hidden');
-                    speedSlowTypeContainer.classList.add('hidden');
-                } else if (speedSlowRadio.checked) {
-                    currentNPC.speechProfile.speed = 'slow';
-                    speedSlowTypeContainer.classList.remove('hidden');
-                    speedFastTypeContainer.classList.add('hidden');
-                } else { 
-                    currentNPC.speechProfile.speed = null;
-                    speedFastTypeContainer.classList.add('hidden');
-                    speedSlowTypeContainer.classList.add('hidden');
-                }
+                if (speedFastRadio.checked) { currentNPC.speechProfile.speed = 'fast'; speedFastTypeContainer.classList.remove('hidden'); speedSlowTypeContainer.classList.add('hidden'); } 
+                else if (speedSlowRadio.checked) { currentNPC.speechProfile.speed = 'slow'; speedSlowTypeContainer.classList.remove('hidden'); speedFastTypeContainer.classList.add('hidden'); } 
+                else { currentNPC.speechProfile.speed = null; speedFastTypeContainer.classList.add('hidden'); speedSlowTypeContainer.classList.add('hidden'); }
                 updateSpeechProfileDisplay();
             }
             function handleVolumeChange() { 
@@ -956,43 +852,118 @@
                 volumeSoftTypeSelect.value = ''; 
                 updateSelectedOptionDefinition(volumeLoudTypeSelect, volumeLoudTypeDescription, speechDefinitions.volume.loud);
                 updateSelectedOptionDefinition(volumeSoftTypeSelect, volumeSoftTypeDescription, speechDefinitions.volume.soft);
-
-                if (volumeLoudRadio.checked) {
-                    currentNPC.speechProfile.volume = 'loud';
-                    volumeLoudTypeContainer.classList.remove('hidden');
-                    volumeSoftTypeContainer.classList.add('hidden');
-                } else if (volumeSoftRadio.checked) {
-                    currentNPC.speechProfile.volume = 'soft';
-                    volumeSoftTypeContainer.classList.remove('hidden');
-                    volumeLoudTypeContainer.classList.add('hidden');
-                } else {
-                    currentNPC.speechProfile.volume = null;
-                    volumeLoudTypeContainer.classList.add('hidden');
-                    volumeSoftTypeContainer.classList.add('hidden');
-                }
+                if (volumeLoudRadio.checked) { currentNPC.speechProfile.volume = 'loud'; volumeLoudTypeContainer.classList.remove('hidden'); volumeSoftTypeContainer.classList.add('hidden'); } 
+                else if (volumeSoftRadio.checked) { currentNPC.speechProfile.volume = 'soft'; volumeSoftTypeContainer.classList.remove('hidden'); volumeLoudTypeContainer.classList.add('hidden'); } 
+                else { currentNPC.speechProfile.volume = null; volumeLoudTypeContainer.classList.add('hidden'); volumeSoftTypeContainer.classList.add('hidden'); }
                 updateSpeechProfileDisplay();
             }
             function updateSpeechProfileFromInput(key, value, selectElement, descriptionElement, definitionSource) { 
-                if (value === "" && (key === "speedType" || key === "volumeType" || key === "tone" || key === "emphasis" || key === "pauses" || key === "vocabularyCategory" || key === "metaphorsCategory")) {
-                    currentNPC.speechProfile[key] = null;
-                } else {
-                    currentNPC.speechProfile[key] = value;
-                }
-                if (selectElement && descriptionElement && definitionSource) {
-                    updateSelectedOptionDefinition(selectElement, descriptionElement, definitionSource);
-                }
+                if (value === "" && (key === "speedType" || key === "volumeType" || key === "tone" || key === "emphasis" || key === "pauses" || key === "vocabularyCategory" || key === "metaphorsCategory")) { currentNPC.speechProfile[key] = null; } 
+                else { currentNPC.speechProfile[key] = value; }
+                if (selectElement && descriptionElement && definitionSource) { updateSelectedOptionDefinition(selectElement, descriptionElement, definitionSource); }
                 updateSpeechProfileDisplay();
             }
             function updateSpeechPatternCheckboxes() { 
                 const selectedPatterns = [];
-                speechPatternsCheckboxesContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                    selectedPatterns.push(checkbox.value);
-                });
+                speechPatternsCheckboxesContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => { selectedPatterns.push(checkbox.value); });
                 currentNPC.speechProfile.speechPatterns = selectedPatterns;
                 updateSpeechProfileDisplay();
             }
 
-            // --- Event Handlers ---
+            function downloadNPCData() {
+                const npcDataString = JSON.stringify(currentNPC, null, 2);
+                const blob = new Blob([npcDataString], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const npcNameForFile = (currentNPC.name || 'untitled_npc').replace(/\s+/g, '_').toLowerCase();
+                a.download = `${npcNameForFile}.json`;
+                a.href = url;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showMessage('NPC data downloaded!', 'success');
+            }
+
+            function loadNPCFromFile() {
+                const file = uploadNpcFile.files[0];
+                if (!file) { showMessage('Please select a JSON file to upload.', 'error'); return; }
+                if (file.type !== "application/json") { showMessage('Invalid file type. Please upload a .json file.', 'error'); uploadNpcFile.value = ''; return; }
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const loadedData = JSON.parse(event.target.result);
+                        
+                        currentNPC.name = loadedData.name || '';
+                        currentNPC.description = loadedData.description || '';
+                        currentNPC.motivations = loadedData.motivations || { minor: [], moderate: [], major: [] };
+                        currentNPC.speechProfile = loadedData.speechProfile || { speed: null, speedType: null, volume: null, volumeType: null, tone: null, emphasis: null, pauses: null, vocabularyCategory: null, vocabularyExamples: '', metaphorsCategory: null, metaphorsExamples: '', speechPatterns: [], speechPatternsExamples: '' };
+
+                        npcNameInput.value = currentNPC.name;
+                        npcDescriptionInput.value = currentNPC.description;
+
+                        if (currentNPC.speechProfile.speed === 'fast') speedFastRadio.checked = true;
+                        else if (currentNPC.speechProfile.speed === 'slow') speedSlowRadio.checked = true;
+                        else { speedFastRadio.checked = false; speedSlowRadio.checked = false; }
+                        handleSpeedChange(); 
+                        if(currentNPC.speechProfile.speedType) {
+                            if(currentNPC.speechProfile.speed === 'fast') speedFastTypeSelect.value = currentNPC.speechProfile.speedType;
+                            if(currentNPC.speechProfile.speed === 'slow') speedSlowTypeSelect.value = currentNPC.speechProfile.speedType;
+                        }
+
+                        if (currentNPC.speechProfile.volume === 'loud') volumeLoudRadio.checked = true;
+                        else if (currentNPC.speechProfile.volume === 'soft') volumeSoftRadio.checked = true;
+                        else { volumeLoudRadio.checked = false; volumeSoftRadio.checked = false; }
+                        handleVolumeChange();
+                         if(currentNPC.speechProfile.volumeType) {
+                            if(currentNPC.speechProfile.volume === 'loud') volumeLoudTypeSelect.value = currentNPC.speechProfile.volumeType;
+                            if(currentNPC.speechProfile.volume === 'soft') volumeSoftTypeSelect.value = currentNPC.speechProfile.volumeType;
+                        }
+
+                        speechToneSelect.value = currentNPC.speechProfile.tone || '';
+                        speechEmphasisSelect.value = currentNPC.speechProfile.emphasis || '';
+                        speechPausesSelect.value = currentNPC.speechProfile.pauses || '';
+                        speechVocabularyCategorySelect.value = currentNPC.speechProfile.vocabularyCategory || '';
+                        speechVocabularyExamplesTextarea.value = currentNPC.speechProfile.vocabularyExamples || '';
+                        speechMetaphorsCategorySelect.value = currentNPC.speechProfile.metaphorsCategory || '';
+                        speechMetaphorsExamplesTextarea.value = currentNPC.speechProfile.metaphorsExamples || '';
+                        
+                        speechPatternsCheckboxesContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                        if (currentNPC.speechProfile.speechPatterns && Array.isArray(currentNPC.speechProfile.speechPatterns)) {
+                            currentNPC.speechProfile.speechPatterns.forEach(patternKey => {
+                                const checkbox = document.getElementById(`speechPattern-${patternKey}`);
+                                if (checkbox) checkbox.checked = true;
+                            });
+                        }
+                        speechPatternsExamplesTextarea.value = currentNPC.speechProfile.speechPatternsExamples || '';
+
+                        updateSelectedOptionDefinition(speedFastTypeSelect, speedFastTypeDescription, speechDefinitions.speed.fast);
+                        updateSelectedOptionDefinition(speedSlowTypeSelect, speedSlowTypeDescription, speechDefinitions.speed.slow);
+                        updateSelectedOptionDefinition(volumeLoudTypeSelect, volumeLoudTypeDescription, speechDefinitions.volume.loud);
+                        updateSelectedOptionDefinition(volumeSoftTypeSelect, volumeSoftTypeDescription, speechDefinitions.volume.soft);
+                        updateSelectedOptionDefinition(speechToneSelect, speechToneDescription, speechDefinitions.tone);
+                        updateSelectedOptionDefinition(speechEmphasisSelect, speechEmphasisDescription, speechDefinitions.emphasis);
+                        updateSelectedOptionDefinition(speechPausesSelect, speechPausesDescription, speechDefinitions.pauses);
+                        updateSelectedOptionDefinition(speechVocabularyCategorySelect, speechVocabularyCategoryDescription, speechDefinitions.vocabulary);
+                        updateSelectedOptionDefinition(speechMetaphorsCategorySelect, speechMetaphorsCategoryDescription, speechDefinitions.metaphors);
+
+                        updateNpcDetailsDisplay();
+                        renderMotivations(); 
+                        updateSpeechProfileDisplay();
+                        
+                        showMessage('NPC data loaded successfully!', 'success');
+                    } catch (e) {
+                        showMessage('Error parsing JSON file: ' + e.message, 'error');
+                        console.error("JSON Parsing Error: ", e);
+                    }
+                };
+                reader.onerror = function() { showMessage('Error reading file.', 'error'); console.error("File Reading Error: ", reader.error); };
+                reader.readAsText(file);
+                uploadNpcFile.value = ''; 
+            }
+
+            function triggerPrintNPC() { window.print(); }
+
             npcNameInput.addEventListener('input', () => { currentNPC.name = npcNameInput.value; updateNpcDetailsDisplay(); });
             npcDescriptionInput.addEventListener('input', () => { currentNPC.description = npcDescriptionInput.value; updateNpcDetailsDisplay(); });
             addOrUpdateMotivationBtn.addEventListener('click', addOrUpdateMotivation);
@@ -1021,54 +992,29 @@
             speechPatternsCheckboxesContainer.addEventListener('change', updateSpeechPatternCheckboxes);
             speechPatternsExamplesTextarea.addEventListener('input', (e) => updateSpeechProfileFromInput('speechPatternsExamples', e.target.value));
 
-            saveNpcBtn.addEventListener('click', () => {
-                if (!currentNPC.name && !currentNPC.description && 
-                    currentNPC.motivations.minor.length === 0 &&
-                    currentNPC.motivations.moderate.length === 0 &&
-                    currentNPC.motivations.major.length === 0 &&
-                    Object.values(currentNPC.speechProfile).every(val => val === null || val === '' || (Array.isArray(val) && val.length === 0)) 
-                    ) {
-                    showMessage('NPC is empty. Add some details before saving.', 'warning');
-                    return;
-                }
-                console.log("NPC Data:", JSON.parse(JSON.stringify(currentNPC)));
-                showMessage('NPC data logged to the browser console!', 'info');
-            });
+            downloadNpcBtn.addEventListener('click', downloadNPCData); 
+            loadNpcBtn.addEventListener('click', loadNPCFromFile);
+            printNpcBtn.addEventListener('click', triggerPrintNPC);
 
-            // --- Initial setup ---
             document.body.addEventListener('mouseover', (event) => {
                 const target = event.target;
                 let tooltipText = null;
-
-                if (target.matches('option') && target.hasAttribute('data-definition')) {
-                    tooltipText = target.getAttribute('data-definition');
-                } else if (target.hasAttribute('data-tooltip-key')) {
-                    tooltipText = getDefinitionFromKey(target.getAttribute('data-tooltip-key'));
-                } else if (target.id === 'motivationLevelDescription') {
-                     tooltipText = target.getAttribute('data-tooltip-definition-full');
-                } else if (target.classList.contains('selected-option-description') && target.hasAttribute('data-tooltip-definition')) {
-                    tooltipText = target.getAttribute('data-tooltip-definition');
-                }
-                
-                if (tooltipText) {
-                    showCustomTooltip(event, tooltipText);
-                }
+                if (target.matches('option') && target.hasAttribute('data-definition')) { tooltipText = target.getAttribute('data-definition'); } 
+                else if (target.hasAttribute('data-tooltip-key')) { tooltipText = getDefinitionFromKey(target.getAttribute('data-tooltip-key')); } 
+                else if (target.id === 'motivationLevelDescription') { tooltipText = target.getAttribute('data-tooltip-definition-full'); } 
+                else if (target.classList.contains('selected-option-description') && target.hasAttribute('data-tooltip-definition')) { tooltipText = target.getAttribute('data-tooltip-definition'); }
+                if (tooltipText) { showCustomTooltip(event, tooltipText); }
             });
-
             document.body.addEventListener('mouseout', hideCustomTooltip);
             document.body.addEventListener('mousemove', (event) => {
                 if (customTooltipElement.style.display === 'block') {
-                    let x = event.pageX + 15;
-                    let y = event.pageY + 15;
-                    const screenWidth = window.innerWidth;
-                    const screenHeight = window.innerHeight;
+                    let x = event.pageX + 15; let y = event.pageY + 15;
+                    const screenWidth = window.innerWidth; const screenHeight = window.innerHeight;
                     const tooltipRect = customTooltipElement.getBoundingClientRect(); 
                     if (x + tooltipRect.width > screenWidth -10) x = event.pageX - tooltipRect.width - 15;
                     if (y + tooltipRect.height > screenHeight -10) y = event.pageY - tooltipRect.height - 15;
-                    if (x < 10) x = 10;
-                    if (y < 10) y = 10;
-                    customTooltipElement.style.left = `${x}px`;
-                    customTooltipElement.style.top = `${y}px`;
+                    if (x < 10) x = 10; if (y < 10) y = 10;
+                    customTooltipElement.style.left = `${x}px`; customTooltipElement.style.top = `${y}px`;
                 }
             });
 
